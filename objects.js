@@ -15,12 +15,12 @@
 //     //     console.log(2019 - this.yearsOfBirth);
 //     // }
 // }
-// //Instantiation or instances of the person object. 
+// //Instantiation or instances of the person object.
 // //New === empty object created, function is called, which has a this a varaible.
 // //Instead of the 'this' pointing to the global scope, the new keyword points to the new empty object.
 // //Since there is no return for the person object, our johnV2 has only the three parameters.
 
-// //Remember, propertie listed with the constructor.property belongs to the ones who inherit it (johnV2, lisa, etc), not the parent (Person).
+// //Remember, properties listed with the constructor.property belongs to the ones who inherit it (johnV2, lisa, etc), not the parent (Person).
 // //Inheritance
 // Person.prototype.calcAge =
 //     function () {
@@ -46,7 +46,7 @@
 
 
 // //Object.create
-// //Define object that acts as the prototype, then create a new object based on that prototype. 
+// //Define object that acts as the prototype, then create a new object based on that prototype.
 // //Not a function constructor, so no capital first letter.
 // //The difference between the obj.create and the function constructor is the former builds an object that inherits the one we directly passed through, whereas the latter inherits directly from the prototype property.
 
@@ -119,7 +119,7 @@
 // //     console.log(`Sorry ${name}, what do you do?`);
 // // }
 
-// //'chef' returns a function 
+// //'chef' returns a function
 // //think interviewQs('chef')  ==== function
 // //then add the param for the name variable.
 // interviewQs('chef')("mike");
@@ -215,7 +215,7 @@ mindy.show.call(mindyFriend, 'friendly', 'afternoon')
 //Bind method
 //Doesn't immediately call the function but generates a copy which we can store.
 //Returns a function, must be called with () to see the results unlike call and apply methods.
-//Preset function parameters. 
+//Preset function parameters.
 let mindyFriendly = mindy.show.bind(mindy, 'friendly');
 mindyFriendly('morning');
 mindyFriendly("afternoon");
@@ -245,6 +245,6 @@ let ages = calculateAgeV2(years, calculateAge);
 
 //Binding used with functions instead of defining objects first
 //Not to say that a function is not an object.
-//The line reads: loop through the array, but for the first argument, we will use this, then the parameters we need for the function, in this case, it has two. 
+//The line reads: loop through the array, but for the first argument, we will use this, then the parameters we need for the function, in this case, it has two.
 let fullAgeJapan = calculateAgeV2(ages, isAdult.bind(this, 20));
 
