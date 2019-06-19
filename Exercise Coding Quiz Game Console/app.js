@@ -20,7 +20,7 @@ Rules/Hints
 
 
 (function () {
-    let count = 0; let points = 0;
+    let count = 0;
     // 1. Create a function constructor called Question
     // 2. The constructor Question needs the question itself, answers users can select and the correct answer.
     let Question = function (question, answers, correctAnswer) {
@@ -42,6 +42,49 @@ Rules/Hints
 
     //4. Store the questions inside an array.
     let arsenal = [q1, q2, q3];
+    let scoreBoard = keepingScore();
+
+
+    //Updated Solution to display the question/answer 
+    Question.prototype.display =
+        function () {
+            console.log(this.question);
+            this.answers.forEach(function (item) {
+                console.log(item)
+            })
+        };
+
+    //Updated solution to check the answers given by the user.
+    Question.prototype.checkAnswers = function (prompts) {
+        let scoreKeeper = scoreBoard;
+        let boolean;
+        if (parseInt(prompts) === this.correctAnswer) {
+            console.log(`Correct!`)
+            boolean = scoreKeeper(true);
+        } else {
+            console.log(`Incorrect!`);
+            boolean = scoreKeeper(false);
+        }
+        this.printRoundScore(boolean);
+    }
+
+    //Print statement of score update
+    Question.prototype.printRoundScore = function (score) {
+        console.log(`Your round score is ${score} point(s)`);
+    }
+
+
+    //Update solution to keeping score without mutating global variables.
+    function keepingScore() {
+        let score = 0;
+        return function (boolean) {
+            if (boolean) {
+                score++;
+            }
+            return score;
+        }
+    }
+
 
     // 5. Select a random question and log it in the console.
     // 6. Use prompt function to get user's input.
@@ -54,20 +97,16 @@ Rules/Hints
     function run() {
         while (count < arsenal.length) {
             let random = Math.floor(Math.random() * arsenal.length);
-            console.log(arsenal[random].question);
-            arsenal[random].answers.forEach(function (item) {
-                console.log(item)
-            })
+            arsenal[random].display();
             let prompts = prompt("What is the answer to this question?\nType the corresponding number to the answer.")
-            if (parseInt(prompts) === arsenal[random].correctAnswer) {
-                points++;
-                console.log(`Correct!, you now have ${points} point(s)`)
-            } else {
-                console.log(`Incorrect, your current score is ${points} point(s)`);
-            }
+            arsenal[random].checkAnswers(prompts);
             count++;
         }
-        console.log(`You have a total of ${points} point(s)`);
+        //Did something clever here, even surprised myself
+        //scoreBoard returns the inner function, the inner function(boolean) returns the score.
+        //I knew if it was true, it's be score+1, but false would just return the current score.
+        //Now when the loop ends, I can now output the final score considering it would be impossible doing so any other way.
+        console.log(`You have a total of ${scoreBoard(false)} point(s)`);
     }
     run();
 })();
