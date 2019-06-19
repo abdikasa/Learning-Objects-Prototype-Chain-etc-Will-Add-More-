@@ -221,5 +221,30 @@ mindyFriendly('morning');
 mindyFriendly("afternoon");
 
 
+let years = [1996, 2000, 2005, 1999, 1956, 2012];
 
+//simple function
+function calculateAge(year) {
+    return 2019 - year;
+}
+
+function calculateAgeV2(array, fnc) {
+    let inner = [];
+    for (let i = 0; i < array.length; i++) {
+        inner.push(fnc(array[i]));
+    }
+    return inner;
+}
+
+function isAdult(limit, age) {
+    return age >= limit;
+}
+
+let ages = calculateAgeV2(years, calculateAge);
+//let fullAges = calculateAgeV2(ages, isAdult);
+
+//Binding used with functions instead of defining objects first
+//Not to say that a function is not an object.
+//The line reads: loop through the array, but for the first argument, we will use this, then the parameters we need for the function, in this case, it has two. 
+let fullAgeJapan = calculateAgeV2(ages, isAdult.bind(this, 20));
 
