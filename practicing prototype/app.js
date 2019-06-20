@@ -60,6 +60,98 @@ Athelete.prototype.isMarriedTo = function () {
     return `Congratulations on your marraige, ${this.first}`;
 }
 
+/**************************************** */
+//              Object.create
+/**************************************** */
+
+//Alternative Way to create objects
+//Create protos inside of parent objects and have different properties and methods/functions.
+
+const personProto = {
+    greeting: function () {
+        return `Hello there ${this.first} ${this.last}`
+    },
+    witnessProtection: function (firstName, lastName) {
+        this.first = firstName;
+        this.last = lastName;
+        console.log(`Your new name is ${this.first} ${this.last}.`)
+    }
+
+}
+
+//Note: takes prototype inside create paranthesis.
+const jerome = Object.create(personProto);
+jerome.first = 'Jerome';
+jerome.last = "McDonald";
+jerome.witnessProtection('john', 'doe');
+
+//Another way of creating objects
+const notJerome = Object.create(personProto, {
+    first: { value: 'DonaldMC' },
+    last: { value: 'Emorej' }
+})
+
+
+/**************************************** */
+//          ES6 Classes
+/**************************************** */
+
+//no commas
+//Commented out static method, this functions exactly  like java fortunately.
+class Person {
+    constructor(first, last) {
+        this.first = first;
+        this.last = last;
+    }
+    greeting() {
+        return `Hi, my name is ${this.first}, what's your name?`
+    }
+    // static addition(x, y) {
+    //     return x + y;
+    // }
+}
+
+const julieV2 = new Person('Julie', 'Carmicheal');
+//let add = Person.addition(665, 1);
+//console.log(add);
+
+
+/**************************************** */
+//          ES6 Subclasses
+/**************************************** */
+
+class Student extends Person {
+    constructor(first, last, school, gpa) {
+        super(first, last);
+        this.school = school;
+        this.gpa = gpa;
+    }
+
+    static getPaid(){
+        return Math.floor(Math.random()*500 + 1);
+    }
+}
+
+//proto person --> but the constructor will be Student
+const dick = new Student('Dick', 'Grayson', 'Gotham High', 4.0);
+
+console.log(dick.greeting());
+let amount = Student.getPaid();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
