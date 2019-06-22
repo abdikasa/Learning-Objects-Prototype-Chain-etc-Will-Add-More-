@@ -180,19 +180,91 @@ function returnObject() {
     }
 }
 
-
 /****************************************** */
 ///              IIFE Again
 /****************************************** */
 
+const anotherGreet = function (name) {
+    console.log(`Hello, ${name}`)
+}
+
+console.log(anotherGreet)
+
+//The code above outputs the commented code below, after all we are printing it not calling it.
+//function(name){
+//console.log(`Hello, ${name}`)
+//}
 
 
+//IIFE, runs imediately after creating the function expression.
+const anotherGreet = function (name, timeOfDay) {
+    console.log(`Hello, ${name}, good ${timeOfDay}`)
+}("Kareem", "afternoon");
+
+//print the results with console.log(anotherGreet);
+
+//READ THIS KAREEM
+// 3; "this is a string"; {hello: 'hello'}; are all valid.
+// Howerver, function (name) {return name;} is not, why??
+//Because the parser sees the function at the beginning of the line when it executes char by char. So it deems that part of the code as a function statement, while we are attempting to create a function 'on the fly'.
+//Solution: Make sure that the line does not begin with the word function, enclose in paranthesis to tell the parser that this is not a function statement.
+
+/****************************************** */
+///              Closures
+/****************************************** */
+
+function greetMe(whattosay) {
+    return function (name) {
+        console.log(`${whattosay}, ${name}`);
+    }
+}
+
+//greetMe('Hola')('Kareem');
+//Due to thelexical environment/positioning of the code, whattosay is still stored in memory even when the greetMe function is popped off the execution stack. "Closing in" on the outer variables that it still should have access to.
+
+function buildArray() {
+    let arr = [];
+    for (let i = 0; i < 3; i++) {
+        arr.push(function () { console.log(i) })
+    }
+}
+
+const builder = buildArray();
+builder[0](); //Prediction: 0       Result = 3 ?????
+builder[2](); //Prediction: 1       Result = 3 ????
+
+//Thought Process (Realization)
+//In the execution context: when the loop is finished, arr = [func0, func1, func2], i = 3.
+//Im an idiot, the function never runs until the () is invoked, thus when we call the function,
+//it will always be 3, since the loop is finished.
+//buildArray() has an i value which it stores in memory is 3.
+//When builder[0] runs, it has no i value, it goes up the chain and in memory, i = 3.
 
 
+//To get what I expected when builder[0] = 0, builder[1] = 1, ...
+// function buildArray(){
+//     let arr = [];
+//     for(let i = 0; i < 3; i++){
+// arr.push(
+//     (function (j) {
+//         console.log(j)
+//     }(i))
+// )
+// }
 
+/****************************************** */
+///              Callback Function
+/****************************************** */
 
+function executeLater(callback) {
+    let a = 1000; let b = 2000;
+    callback();
+    console.log(a, b)
+}
 
-
+executeLater(function () {
+    console.log('All done.....')
+})
 
 
 /****************************************** */
@@ -216,6 +288,92 @@ const arr = [1,
 //To access the name variable we want to plug into the method.
 //arr[3](arr[2].name)
 
+
+/****************************************** */
+///          Call, Apply, Bind
+/****************************************** */
+
+const micheal = {
+    first: 'Micheal',
+    last: 'Scott',
+    getFullName: function () {
+        let full = `${this.first} ${this.last}`;
+        return full;
+    }
+}
+
+const logName = function () {
+    console.log(`Logged user: ${this.getFullName()}`)
+}
+
+//What did we do here
+//All functions objects have access to bind, apply, call
+//We are not invoking the function aka ().
+//Bind returns a new function, makes a copy of logName and replaces the 'this' variable with the micheal object.
+//If we wanted shorter code we could add to  the paranthesis on logname expression .bind(micheal)() to have the same effect.
+
+const logPersonName = logName.bind(micheal)
+
+//call
+//Executes the function unlikes bind()
+logName.call('micheal')
+
+//apply
+//does exactly the same thing as call but needs an array.
+logName.apply('micheal')
+
+//Borrowing functions
+
+const jim = {
+    first: 'jim',
+    last: 'halpert'
+}
+
+//Take micheal's method, execute it, with jim details/properties, finally log it to see the results.
+console.log(micheal.getFullName.apply(jim));
+
+//Function Currying
+
+function multiply(a, b) {
+    return a * b;
+}
+
+//Variable a will have a permanenet value of 2.
+const multiplyByTwo = multiply.bind(this, 2);
+multiplyByTwo(3)  //6
+multiplyByTwo(100) //200
+
+
+function mapForEach(arr, fn) {
+    let newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+        newArr.push(fn(arr[i]));
+    }
+    return newArr;
+}
+
+let arr2 = mapForEach([1, 2, 3], function (item) {
+    return item * 2;
+});
+
+let arr3 = mapForEach([1, 2, 3], function (item) {
+    return item > 2;
+});
+
+let checkLimit = function (limiter, item) {
+    return item > limiter;
+}
+
+const limitBy5 = checkLimit.bind(this, 5);
+
+const arr4 = mapForEach([1,2,3], limitBy5);
+
+let checkLimitBind = function(number) {
+    return checkLimit.bind(this, number);  
+}
+
+let arr5 = mapForEach([1,15,30,-5, 6], checkLimitBind(10));
+console.log(arr5) // [false, true, true, false, false];
 
 
 
