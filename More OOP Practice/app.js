@@ -356,28 +356,68 @@ let arr2 = mapForEach([1, 2, 3], function (item) {
     return item * 2;
 });
 
-let arr3 = mapForEach([1, 2, 3], function (item) {
-    return item > 2;
-});
-
 let checkLimit = function (limiter, item) {
     return item > limiter;
 }
 
 const limitBy5 = checkLimit.bind(this, 5);
+const arr4 = mapForEach([1, 2, 3], limitBy5);
 
-const arr4 = mapForEach([1,2,3], limitBy5);
-
-let checkLimitBind = function(number) {
-    return checkLimit.bind(this, number);  
+let checkLimitBind = function (number) {
+    return checkLimit.bind(this, number);
 }
 
-let arr5 = mapForEach([1,15,30,-5, 6], checkLimitBind(10));
+let arr5 = mapForEach([1, 15, 30, -5, 6], checkLimitBind(10));
 console.log(arr5) // [false, true, true, false, false];
 
 
+/****************************************** */
+///          Prototype
+/****************************************** */
+
+let obj = {
+    name: 'obj',
+    siblings: 'none',
+    isHungry: false
+};
 
 
+//To  loop through an object's properties
+Object.keys(obj).forEach(function (key) {
+    console.log(key, obj[key])
+});
+
+
+//This also returns the same thing as above + the prototpe's properties
+//If we don't want that, we can use the built in hasOwnProperty(prop) inside the for loop.
+
+// for(let prop in obj){
+//     console.log(`${prop} : ${obj[prop]}`);
+// }
+
+
+//If you are building objects with a function's constructor, prototype can be used.
+//prototype refers to the prototype of any object created by it.
+
+function TheAvatar(masteredElements) {
+    this.masteredElements = masteredElements;
+}
+
+let avatarAang = new TheAvatar(['air', 'fire', 'earth', 'water']);
+
+TheAvatar.prototype.getMasteredElements = function(fnc){
+   let array = [];
+  for(let i = 0; i < this.masteredElements.length; i++){
+    array.push(fnc(this.masteredElements[i]));
+  }
+  return array;
+}
+
+console.log(avatarAang.getMasteredElements(bigger));
+
+function bigger(item) {
+  return item.toUpperCase();
+}
 
 
 
